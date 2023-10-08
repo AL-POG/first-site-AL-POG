@@ -1,0 +1,123 @@
+body{
+    margin: 5%;
+    font-family:sans-serif;
+}
+header{
+    justify-content: center;
+    min-height: 60px;
+    background-color: rgb(179, 179, 179);
+}
+h1{
+    width: 100%;
+    text-align: center;
+    font-style:italic;
+    font-size:38px;
+}
+.SectionWithCards h3{
+    width: 100%;
+    text-align:center;
+    font-style: normal;
+    font-size: larger;
+}
+.SectionWithCards{
+    display:flex;
+    flex-direction:row;
+    justify-content:space-evenly;
+    align-items:center;
+    flex-wrap:wrap;
+}
+.CardWithDescription{
+    border-style: double;
+    box-shadow: 0 0 15px dimgray;
+    border-radius: 10px;
+    margin: 10px;
+    padding: 10px;
+    max-width: 250px;
+    min-height: 300px;
+    font-size: 20px;
+    background-color: white;
+}
+footer{
+    min-height: 60px;
+    background-color: rgb(179, 179, 179);
+}
+p{
+    font-size: 15px;
+}
+.photo{
+    width: 70px;
+    height: 70px;
+    position: relative;
+    left: 20px;
+    border-radius: 30%;
+    background-size: cover;
+}
+html{
+    background-color: rgb(234, 232, 224);
+}
+@media screen and (max-width:704px){
+    h1{
+        font-size:28px;
+    }
+    p{
+        font-size: 13px;
+    }
+    .photo{
+        width: 60px;
+        height: 60px;
+        left: 18px; 
+    }
+    body{
+        margin: 4%;
+    }
+    header{
+        min-height: 50px;
+    }
+    footer{
+        min-height: 50px;
+    }
+    .CardWithDescription{
+        box-shadow: 0 0 10px dimgray;
+        border-radius: 10px;
+        margin: 8px;
+        font-size: 15px;
+    }
+    .SectionWithCards h3{
+        font-size: small;
+    }
+}
+@media screen and (max-width:655px){
+    img{
+        display: none;
+    }
+    .CardWithDescription{
+        min-height: 230px;
+    }
+}
+@media screen and (max-width:346px){
+    h2{
+        font-size: 15px;
+    }
+    ul{
+        font-size: 13px;
+    }
+    .CardWithDescription{
+        min-height: 200px;
+    }
+}
+@media screen and (max-width:200px){
+    h1{
+        font-size:20px;
+    }
+    p{
+        font-size: 10px;
+    }
+    .CardWithDescription{
+        min-height: 100px;
+    }
+}
+@media print{
+    img{
+        display: none;
+    }
+}
