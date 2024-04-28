@@ -2,15 +2,15 @@
 #include <GL/glu.h>
 #include <math.h>
 #include <stdio.h>
-#include <stdlib.h>              // Подключение стандартных библиотечных функций
+#include <stdlib.h>              // РџРѕРґРєР»СЋС‡РµРЅРёРµ СЃС‚Р°РЅРґР°СЂС‚РЅС‹С… Р±РёР±Р»РёРѕС‚РµС‡РЅС‹С… С„СѓРЅРєС†РёР№
 #include <iostream>
 #include <vector>
 #include <string>
-#include <malloc.h>              // Подключение функций управления памятью
-#include <windows.h>             // Подключение функций для работы с Windows
+#include <malloc.h>              // РџРѕРґРєР»СЋС‡РµРЅРёРµ С„СѓРЅРєС†РёР№ СѓРїСЂР°РІР»РµРЅРёСЏ РїР°РјСЏС‚СЊСЋ
+#include <windows.h>             // РџРѕРґРєР»СЋС‡РµРЅРёРµ С„СѓРЅРєС†РёР№ РґР»СЏ СЂР°Р±РѕС‚С‹ СЃ Windows
 #include <time.h>
-#define STB_IMAGE_IMPLEMENTATION // Макрос для включения реализации в stb_image.h
-#include "stb-master/stb_image.h" // Подключение stb_image.h для загрузки изображений
+#define STB_IMAGE_IMPLEMENTATION // РњР°РєСЂРѕСЃ РґР»СЏ РІРєР»СЋС‡РµРЅРёСЏ СЂРµР°Р»РёР·Р°С†РёРё РІ stb_image.h
+#include "stb-master/stb_image.h" // РџРѕРґРєР»СЋС‡РµРЅРёРµ stb_image.h РґР»СЏ Р·Р°РіСЂСѓР·РєРё РёР·РѕР±СЂР°Р¶РµРЅРёР№
 
 const int go = 0;
 const int up = 1;
@@ -157,8 +157,8 @@ float tileWidth = (SCREEN_WIDTH / MAP_WIDTH);
 float tileHeight = (SCREEN_HEIGHT / MAP_HEIGHT);
 
 bool check_Gravity(float deltaX, float deltaY) {
-    int x = floor((player.posX + deltaX)/ /*50*/ tileWidth);
-    int y = floor((player.posY + deltaY)/ /*50*/ tileHeight);
+    int x = floor((player.posX + deltaX)/ tileWidth);
+    int y = floor((player.posY + deltaY)/ tileHeight);
 
         if(collisionMap[y][x] == 1 || collisionMap[y][x+1] == 1) {
             return false;
@@ -169,8 +169,8 @@ bool check_Gravity(float deltaX, float deltaY) {
 
 
 float check_Collision_horizon(float deltaX, float deltaY) {
-    int x = floor((player.posX + 0 + deltaX)/ /*50*/ tileWidth);
-    int y = floor((player.posY + 110 + deltaY)/ /*50*/ tileHeight);
+    int x = floor((player.posX + 0 + deltaX)/ tileWidth);
+    int y = floor((player.posY + 110 + deltaY)/ tileHeight);
 
         if(collisionMap[y][x+1] == 0) {
             return player.velocity;
@@ -180,11 +180,11 @@ float check_Collision_horizon(float deltaX, float deltaY) {
 }
 
 bool check_Collision_UP(float deltaX, float deltaY) {
-    int x = floor((player.posX + deltaX)/ /*50*/ tileWidth);
-    int y = floor((player.posY + deltaY)/ /*50*/ tileHeight);
+    int x = floor((player.posX + deltaX)/ tileWidth);
+    int y = floor((player.posY + deltaY)/ tileHeight);
         //std::cout<<" x="<<x<<" y="<<y;
 
-        if(collisionMap[y-1][x] == 1 || collisionMap[y-1][x+1] == 1) {
+        if(collisionMap[y-2][x] == 1 || collisionMap[y-2][x+1] == 1) {
             return true;
         } else {
             return false;
@@ -209,17 +209,14 @@ if (GetKeyState(VK_UP) < 0 && player.isOnFloor == true && player.hit_wall_up == 
 }
 
 if (check_Collision_UP(75, 150) == true) {
-        player.hit_wall_up = true;
-        player.frameLine = up;
-        // Персонаж столкнулся с препятствием сверху, сразу начинаем движение вниз
+        // РџРµСЂСЃРѕРЅР°Р¶ СЃС‚РѕР»РєРЅСѓР»СЃСЏ СЃ РїСЂРµРїСЏС‚СЃС‚РІРёРµРј СЃРІРµСЂС…Сѓ, СЃСЂР°Р·Сѓ РЅР°С‡РёРЅР°РµРј РґРІРёР¶РµРЅРёРµ РІРЅРёР·
          do{
             //player.posY = 100;
             //player.posX = 500;
-            player.posY += player.gravity/2; // Сдвигаем персонажа вниз
-            //player.jumpHeight -= 1;
+            player.posY += player.velocity; // РЎРґРІРёРіР°РµРј РїРµСЂСЃРѕРЅР°Р¶Р° РІРЅРёР·
+
         }while (check_Collision_UP(75, 150) == true);
-        player.isOnFloor = true; // Персонаж больше не находится на полу
-        player.hit_wall_up = false;
+
     }
 
 
@@ -254,18 +251,18 @@ if (check_Collision_UP(75, 150) == true) {
 
 void Draw_CollisionBlocks()
 {
-    // Отрисовка заполненных блоков
-    for (int i = 1; i < MAP_HEIGHT; i++) { // Начинаем с i = 1, чтобы сместить на один блок вверх
-        for (int j = 1; j < MAP_WIDTH; j++) { // Начинаем с j = 1, чтобы сместить на один блок влево
+    // РћС‚СЂРёСЃРѕРІРєР° Р·Р°РїРѕР»РЅРµРЅРЅС‹С… Р±Р»РѕРєРѕРІ
+    for (int i = 1; i < MAP_HEIGHT; i++) { // РќР°С‡РёРЅР°РµРј СЃ i = 1, С‡С‚РѕР±С‹ СЃРјРµСЃС‚РёС‚СЊ РЅР° РѕРґРёРЅ Р±Р»РѕРє РІРІРµСЂС…
+        for (int j = 1; j < MAP_WIDTH; j++) { // РќР°С‡РёРЅР°РµРј СЃ j = 1, С‡С‚РѕР±С‹ СЃРјРµСЃС‚РёС‚СЊ РЅР° РѕРґРёРЅ Р±Р»РѕРє РІР»РµРІРѕ
             if (collisionMap[i][j] == 1) {
                 glBegin(GL_QUADS);
-                glColor3f(0.5, 0.5, 0.5); // Цвет заполненных блоков
+                glColor3f(0.5, 0.5, 0.5); // Р¦РІРµС‚ Р·Р°РїРѕР»РЅРµРЅРЅС‹С… Р±Р»РѕРєРѕРІ
                 float blockSizeX = tileWidth;
                 float blockSizeY = tileHeight;
-                glVertex2f((j - 1) * blockSizeX, (i - 0.5) * blockSizeY); // Смещение на один блок влево и вверх
-                glVertex2f(j * blockSizeX, (i - 0.5) * blockSizeY); // Смещение на один блок вверх
+                glVertex2f((j - 1) * blockSizeX, (i - 0.5) * blockSizeY); // РЎРјРµС‰РµРЅРёРµ РЅР° РѕРґРёРЅ Р±Р»РѕРє РІР»РµРІРѕ Рё РІРІРµСЂС…
+                glVertex2f(j * blockSizeX, (i - 0.5) * blockSizeY); // РЎРјРµС‰РµРЅРёРµ РЅР° РѕРґРёРЅ Р±Р»РѕРє РІРІРµСЂС…
                 glVertex2f(j * blockSizeX, i * blockSizeY);
-                glVertex2f((j - 1) * blockSizeX, i * blockSizeY); // Смещение на один блок влево
+                glVertex2f((j - 1) * blockSizeX, i * blockSizeY); // РЎРјРµС‰РµРЅРёРµ РЅР° РѕРґРёРЅ Р±Р»РѕРє РІР»РµРІРѕ
                 glEnd();
             }
         }
